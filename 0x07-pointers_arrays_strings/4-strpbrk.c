@@ -9,7 +9,7 @@
  * or NULL if no such byte is found
  */
 
-char *_strpbrk(char *s, char *accept);
+char *_strpbrk(char *s, char *accept)
 {
 	int k;
 
