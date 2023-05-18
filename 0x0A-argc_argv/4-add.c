@@ -1,19 +1,48 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
 #include "main.h"
 
 /**
- * main - adds a series of positive numbers
+ * check_num - checks for digits
+ * @str: array str
+ *
+ * Return: Always 0 (Success)
+ */
+
+int check_num(char *str)
+{
+	
+	unsigned int count;
+
+	count = 0;
+
+	while (count < strlen(str))
+
+	{
+		if (!isdigit(str[count]))
+		{
+			return (0);
+		}
+
+		count++;
+	}
+
+	return (1);
+}
+
+/**
+ * main - adds two functions
  * @argc: Count arguments
  * @argv: Arguments
  *
- * Return: 0 (Success), 1 (Error - special characters present)
+ * Return: Always 0 (Success)
  */
 
 int main(int argc, char *argv[])
 
 {
-
 	int count;
 	int str_to_int;
 	int sum = 0;
@@ -24,8 +53,8 @@ int main(int argc, char *argv[])
 		if (check_num(argv[count]))
 
 		{
-			str_to_int = atoi(argv[count]); 
-			sum = sum + str_to_int;
+			str_to_int = atoi(argv[count]);
+			sum += str_to_int;
 		}
 
 		else
