@@ -3,14 +3,14 @@
 
 /** struct list_s - a singly linked list
  * @str: malloced string
- * @length: length of the string
+ * @len: length of the string
  * @next: pointer to the next node in the list
  */
 
 typedef struct list_s
 {
 	char *str;
-	unsigned int length;
+	unsigned int len;
 	struct list_s *next;
 } list_t;
 
