@@ -7,6 +7,9 @@
 
 void first(void)
 {
-	printf("You're beat! and yet, you must allow,\n");
-	printf("I bore my house upon my back!\n");
+	char 1[] = "You're beat! and yet, you must allow";
+	char 2[] = "I bore my house upon my back";
+
+	printf(%s'\n', 1);
+	printf(%s'\n', 2);
 }
