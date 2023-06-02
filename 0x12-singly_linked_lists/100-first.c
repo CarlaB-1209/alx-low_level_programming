@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "main.h"
+#include <stdlib>
 
 void first(void) __attribute__ ((constructor));
 
