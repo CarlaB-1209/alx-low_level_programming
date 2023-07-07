@@ -9,7 +9,7 @@
 
 void print_binary(unsigned long int n)
 {
-	int bitsize = sizeof(unsigned long int) * 8;
+	int bitsize = 32;
 
 	unsigned long int right_bit = 1 << (bitsize - 1);
 
