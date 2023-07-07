@@ -10,7 +10,7 @@
 
 int get_bit(unsigned long int n, unsigned int index)
 {
-	unsigned int bit_number = sizeof(unsigned long int) * 8;
+	unsigned int bit_number = 32;
 	unsigned int important_bit;
 	int bit_value;
 
