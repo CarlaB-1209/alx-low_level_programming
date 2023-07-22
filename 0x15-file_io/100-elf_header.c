@@ -22,7 +22,7 @@ void closer(int elf);
  * @e_ident: pointer to elf magic numbers
  */
 
-void is_elf(unsigned char *e_ident)
+void is_elf(unsigned char *e_identifier)
 {
 	int list;
 
@@ -173,7 +173,7 @@ void osabi(unsigned char *e_identifier)
 		printf("Standalone App\n");
 		break;
 	default:
-		printf("<unknown: %x>\n", e_ident[EI_OSABI]);
+		printf("<unknown: %x>\n", e_identifier[EI_OSABI]);
 	}
 }
 
@@ -219,7 +219,7 @@ void type(unsigned int elf_type, unsigned char *e_identifier)
 		printf("CORE (Core file)\n");
 		break;
 	default:
-		printf("<unknown: %x>\n", e_type);
+		printf("<unknown: %x>\n", elf_type);
 	}
 }
 
@@ -274,7 +274,7 @@ void closer(int elf)
 int main(int __attribute__((__unused__)) argc, char *argv[])
 {
 	Elf64_Ehdr *file_head;
-	int opener, reader
+	int opener, reader;
 
 	opener = open(argv[1], O_RDONLY);
 	if (opener == -1)
@@ -298,7 +298,7 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 		exit(98);
 	}
 
-	is_elf(file_heade->e_identifier);
+	is_elf(file_head->e_identifier);
 	printf("ELF Header:\n");
 	magic(file_head->e_identifier);
 	class(file_head->e_identifier);
