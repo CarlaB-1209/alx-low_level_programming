@@ -62,7 +62,7 @@ void magic(unsigned char *e_ident)
 }
 
 /**
- * class - prints elf header class
+ * print_class - prints elf header class
  * @e_ident: pointer to elf class
  */
 
@@ -190,7 +190,7 @@ void abi(unsigned char *e_ident)
 
 /**
  * type - prints the elf header type
- * @elf_type: the elf type
+ * @e_type: the elf type
  * @e_ident: pointer to elf type
  */
 
@@ -225,7 +225,7 @@ void type(unsigned int e_type, unsigned char *e_ident)
 
 /**
  * entry - prints the entry point
- * @elf_entry: address of the entry point
+ * @e_entry: address of the entry point
  * @e_ident: pointer to address of entry point
  */
 
