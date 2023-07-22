@@ -13,7 +13,7 @@ void data(unsigned char *e_ident);
 void version(unsigned char *e_ident);
 void abi(unsigned char *e_ident);
 void osabi(unsigned char *e_ident);
-void type(unsigned int elf_type, unsigned char *e_ident);
+void type(unsigned int e_type, unsigned char *e_ident);
 void entry(unsigned long int e_entry, unsigned char *e_ident);
 void closer(int elf);
 
@@ -194,14 +194,14 @@ void abi(unsigned char *e_ident)
  * @e_ident: pointer to elf type
  */
 
-void type(unsigned int elf_type, unsigned char *e_ident)
+void type(unsigned int e_type, unsigned char *e_ident)
 {
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
-		elf_type >>= 8;
+		e_type >>= 8;
 
 	printf(" Type: ");
 
-	switch (elf_type)
+	switch (e_type)
 	{
 	case ET_NONE:
 		printf("NONE (None)\n");
@@ -219,7 +219,7 @@ void type(unsigned int elf_type, unsigned char *e_ident)
 		printf("CORE (Core file)\n");
 		break;
 	default:
-		printf("<unknown: %x>\n", elf_type);
+		printf("<unknown: %x>\n", e_type);
 	}
 }
 
@@ -307,6 +307,7 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 	osabi(file_head->e_ident);
 	abi(file_head->e_ident);
 	entry(file_head->e_entry, file_head->e_ident);
+	type(file_head->e_type, file_head->e_ident);
 
 	free(file_head);
 	closer(opener);
