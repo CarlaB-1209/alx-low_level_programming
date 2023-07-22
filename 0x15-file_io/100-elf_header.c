@@ -6,15 +6,15 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-void is_elf(unsigned char *e_identifier);
-void magic(unsigned char *e_identifier);
-void class(unsigned char *e_identifier);
-void data(unsigned char *e_identifier);
-void version(unsigned char *e_identifier);
-void abi(unsigned char *e_identifier);
-void osabi(unsigned char *e_identifier);
-void type(unsigned int elf_type, unsigned char *e_identifier);
-void entry(unsigned long int elf_entry, unsigned char *e_identifier);
+void is_elf(unsigned char *e_ident);
+void magic(unsigned char *e_ident);
+void print_class(unsigned char *e_ident);
+void data(unsigned char *e_ident);
+void version(unsigned char *e_ident);
+void abi(unsigned char *e_ident);
+void osabi(unsigned char *e_ident);
+void type(unsigned int elf_type, unsigned char *e_ident);
+void entry(unsigned long int elf_entry, unsigned char *e_ident);
 void closer(int elf);
 
 /**
@@ -22,16 +22,16 @@ void closer(int elf);
  * @e_ident: pointer to elf magic numbers
  */
 
-void is_elf(unsigned char *e_identifier)
+void is_elf(unsigned char *e_ident)
 {
 	int list;
 
 	for (list = 0; list < 4; list++)
 	{
-		if (e_identifier[list] != 127 &&
-		    e_identifier[list] != 'E' &&
-		    e_identifier[list] != 'L' &&
-		    e_identifier[list] != 'F')
+		if (e_ident[list] != 127 &&
+		    e_ident[list] != 'E' &&
+		    e_ident[list] != 'L' &&
+		    e_ident[list] != 'F')
 		{
 			dprintf(STDERR_FILENO, "Error: Not an ELF file\n");
 			exit(98);
@@ -41,10 +41,10 @@ void is_elf(unsigned char *e_identifier)
 
 /**
  * magic - prints the elf magic numbers
- * @e_identifier: pointer to elf magic numbers
+ * @e_ident: pointer to elf magic numbers
  */
 
-void magic(unsigned char *e_identifier)
+void magic(unsigned char *e_ident)
 {
 	int list;
 
@@ -52,7 +52,7 @@ void magic(unsigned char *e_identifier)
 
 	for (list = 0; list < EI_NIDENT; list++)
 	{
-		printf("%02x", e_identifier[list]);
+		printf("%02x", e_ident[list]);
 
 		if (list == EI_NIDENT - 1)
 			printf("\n");
@@ -63,14 +63,14 @@ void magic(unsigned char *e_identifier)
 
 /**
  * class - prints elf header class
- * @e_identifier: pointer to elf class
+ * @e_ident: pointer to elf class
  */
 
-void class(unsigned char *e_identifier)
+void print_class(unsigned char *e_ident)
 {
 	printf(" Class: ");
 
-	switch (e_identifier[EI_CLASS])
+	switch (e_ident[EI_CLASS])
 	{
 	case ELFCLASSNONE:
 		printf("none\n");
@@ -82,19 +82,19 @@ void class(unsigned char *e_identifier)
 		printf("ELF64\n");
 		break;
 	default:
-		printf("<unknown: %x>\n", e_identifier[EI_CLASS]);
+		printf("<unknown: %x>\n", e_ident[EI_CLASS]);
 	}
 }
 
 /**
  * data - prints elf header data
- * @e_identifier: pointer to data
+ * @e_ident: pointer to data
  */
-void data(unsigned char *e_identifier)
+void data(unsigned char *e_ident)
 {
 	printf(" Data: ");
 
-	switch (e_identifier[EI_DATA])
+	switch (e_ident[EI_DATA])
 	{
 	case ELFDATANONE:
 		printf("none\n");
@@ -106,21 +106,21 @@ void data(unsigned char *e_identifier)
 		printf("2's complement, big endian\n");
 		break;
 	default:
-		printf("<unknown: %x>\n", e_identifier[EI_CLASS]);
+		printf("<unknown: %x>\n", e_ident[EI_CLASS]);
 	}
 }
 
 /**
  * version - prints elf header version
- * @e_identifier: pointer to version
+ * @e_ident: pointer to version
  */
 
-void version(unsigned char *e_identifier)
+void version(unsigned char *e_ident)
 {
 	 printf(" Version: %d",
-			  e_identifier[EI_VERSION]);
+			  e_ident[EI_VERSION]);
 
-	switch (e_identifier[EI_VERSION])
+	switch (e_ident[EI_VERSION])
 	{
 	case EV_CURRENT:
 		printf(" (current)\n");
@@ -133,14 +133,14 @@ void version(unsigned char *e_identifier)
 
 /**
  * osabi - prints the elf header OS/ABI
- * @e_identifier: pointer to OS/ABI
+ * @e_ident: pointer to OS/ABI
  */
 
-void osabi(unsigned char *e_identifier)
+void osabi(unsigned char *e_ident)
 {
 	printf(" OS/ABI: ");
 
-	switch (e_identifier[EI_OSABI])
+	switch (e_ident[EI_OSABI])
 	{
 	case ELFOSABI_NONE:
 		printf("UNIX - System V\n");
@@ -173,30 +173,30 @@ void osabi(unsigned char *e_identifier)
 		printf("Standalone App\n");
 		break;
 	default:
-		printf("<unknown: %x>\n", e_identifier[EI_OSABI]);
+		printf("<unknown: %x>\n", e_ident[EI_OSABI]);
 	}
 }
 
 /**
  * abi - prints the elf header ABI version
- * @e_identifier: pointer to the ABI version
+ * @e_ident: pointer to the ABI version
  */
 
-void abi(unsigned char *e_identifier)
+void abi(unsigned char *e_ident)
 {
 	printf(" ABI Version: %d\n",
-		e_identifier[EI_ABIVERSION]);
+		e_ident[EI_ABIVERSION]);
 }
 
 /**
  * type - prints the elf header type
  * @elf_type: the elf type
- * @e_identifier: pointer to elf type
+ * @e_ident: pointer to elf type
  */
 
-void type(unsigned int elf_type, unsigned char *e_identifier)
+void type(unsigned int elf_type, unsigned char *e_ident)
 {
-	if (e_identifier[EI_DATA] == ELFDATA2MSB)
+	if (e_ident[EI_DATA] == ELFDATA2MSB)
 		elf_type >>= 8;
 
 	printf(" Type: ");
@@ -226,21 +226,21 @@ void type(unsigned int elf_type, unsigned char *e_identifier)
 /**
  * entry - prints the entry point
  * @elf_entry: address of the entry point
- * @e_identifier: pointer to address of entry point
+ * @e_ident: pointer to address of entry point
  */
 
-void entry(unsigned long int elf_entry, unsigned char *e_identifier)
+void entry(unsigned long int elf_entry, unsigned char *e_ident)
 {
 	printf(" Entry point address: ");
 
-	if (e_identifier[EI_DATA] == ELFDATA2MSB)
+	if (e_ident[EI_DATA] == ELFDATA2MSB)
 	{
 		elf_entry = ((elf_entry << 8) & 0xFF00FF00) |
 			  ((elf_entry >> 8) & 0xFF00FF);
 		elf_entry = (elf_entry << 16) | (elf_entry >> 16);
 	}
 
-	if (e_identifier[EI_CLASS] == ELFCLASS32)
+	if (e_ident[EI_CLASS] == ELFCLASS32)
 		printf("%#x\n", (unsigned int)elf_entry);
 
 	else
@@ -298,16 +298,16 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 		exit(98);
 	}
 
-	is_elf(file_head->e_identifier);
+	is_elf(file_head->e_ident);
 	printf("ELF Header:\n");
-	magic(file_head->e_identifier);
-	class(file_head->e_identifier);
-	data(file_head->e_identifier);
-	version(file_head->e_identifier);
-	osabi(file_head->e_identifier);
-	abi(file_head->e_identifier);
-	type(file_head->e_identifier);
-	entry(file_head->elf_entry, file_head->e_identifier;
+	magic(file_head->e_ident);
+	print_class(file_head->e_ident);
+	data(file_head->e_ident);
+	version(file_head->e_ident);
+	osabi(file_head->e_ident);
+	abi(file_head->e_ident);
+	type(file_head->e_ident);
+	entry(file_head->elf_entry, file_head->e_ident;
 
 	free(file_head);
 	closer(opener);
