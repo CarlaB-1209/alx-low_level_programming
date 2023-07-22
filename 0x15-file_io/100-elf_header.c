@@ -13,7 +13,7 @@ void data(unsigned char *e_ident);
 void version(unsigned char *e_ident);
 void abi(unsigned char *e_ident);
 void osabi(unsigned char *e_ident);
-void type(unsigned int elf_type, unsigned char *e_ident);
+void type(unsigned char elf_type, unsigned char *e_ident);
 void entry(unsigned long int elf_entry, unsigned char *e_ident);
 void closer(int elf);
 
@@ -194,7 +194,7 @@ void abi(unsigned char *e_ident)
  * @e_ident: pointer to elf type
  */
 
-void type(unsigned int elf_type, unsigned char *e_ident)
+void type(unsigned char elf_type, unsigned char *e_ident)
 {
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
 		elf_type >>= 8;
