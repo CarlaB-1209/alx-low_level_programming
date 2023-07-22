@@ -1,6 +1,12 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <string.h>
+
 
 char *make_buffer(char *file);
 void close_file_descriptors(int fd);
@@ -61,7 +67,7 @@ int main(int argc, char *argv[])
 
 	if (argc != 3)
 	{
-		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		dprintf(STDERR_FILENO, "Usage: cp file_source file_destination\n");
 		exit(97);
 	}
 
@@ -91,11 +97,11 @@ int main(int argc, char *argv[])
 		reader = read(source, buff, 1024);
 		destination = open(argv[2], O_WRONLY | O_APPEND);
 
-	} while (r > 0);
+	} while (reader > 0);
 
 	free(buff);
 	close_file_descriptors(source);
-	close_file_descriptors(destinatio);
+	close_file_descriptors(destination);
 
 	return (0);
 }
