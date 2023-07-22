@@ -13,8 +13,8 @@ void data(unsigned char *e_ident);
 void version(unsigned char *e_ident);
 void abi(unsigned char *e_ident);
 void osabi(unsigned char *e_ident);
-void type(unsigned char elf_type, unsigned char *e_ident);
-void entry(unsigned long int elf_entry, unsigned char *e_ident);
+void type(unsigned int elf_type, unsigned char *e_ident);
+void entry(unsigned long int e_entry, unsigned char *e_ident);
 void closer(int elf);
 
 /**
@@ -194,7 +194,7 @@ void abi(unsigned char *e_ident)
  * @e_ident: pointer to elf type
  */
 
-void type(unsigned char elf_type, unsigned char *e_ident)
+void type(unsigned int elf_type, unsigned char *e_ident)
 {
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
 		elf_type >>= 8;
@@ -229,22 +229,22 @@ void type(unsigned char elf_type, unsigned char *e_ident)
  * @e_ident: pointer to address of entry point
  */
 
-void entry(unsigned long int elf_entry, unsigned char *e_ident)
+void entry(unsigned long int e_entry, unsigned char *e_ident)
 {
 	printf(" Entry point address: ");
 
 	if (e_ident[EI_DATA] == ELFDATA2MSB)
 	{
-		elf_entry = ((elf_entry << 8) & 0xFF00FF00) |
-			  ((elf_entry >> 8) & 0xFF00FF);
-		elf_entry = (elf_entry << 16) | (elf_entry >> 16);
+		e_entry = ((e_entry << 8) & 0xFF00FF00) |
+			  ((e_entry >> 8) & 0xFF00FF);
+		e_entry = (e_entry << 16) | (e_entry >> 16);
 	}
 
 	if (e_ident[EI_CLASS] == ELFCLASS32)
-		printf("%#x\n", (unsigned int)elf_entry);
+		printf("%#x\n", (unsigned int)e_entry);
 
 	else
-		printf("%#lx\n", elf_entry);
+		printf("%#lx\n", e_entry);
 }
 
 /**
@@ -306,8 +306,7 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 	version(file_head->e_ident);
 	osabi(file_head->e_ident);
 	abi(file_head->e_ident);
-	type(file_head->e_ident);
-	entry(file_head->elf_entry, file_head->e_ident;
+	entry(file_head->e_entry, file_head->e_ident);
 
 	free(file_head);
 	closer(opener);
